@@ -2,6 +2,7 @@
 
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game.CoreGui
+ScreenGui.Name = "RespawnGui"
 local respawnUI = Instance.new("Frame")
 local RRbutton = Instance.new("TextButton")
 local Title = Instance.new("TextLabel")
@@ -38,7 +39,7 @@ local respawnp = tonumber(Percent.Text)
 
 
 respawnUI.Name = "respawnUI"
-respawnUI.Parent = game.CoreGui.ScreenGui
+respawnUI.Parent = game.CoreGui.RespawnGui
 respawnUI.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 respawnUI.BorderColor3 = Color3.fromRGB(0, 0, 0)
 respawnUI.BorderSizePixel = 0
@@ -74,6 +75,10 @@ RRbutton.MouseButton1Down:connect(function()
         respawnp = tonumber(Percent.Text)
         if respawnp == nil then
             Percent.Text = 70
+            respawnp = tonumber(Percent.Text)
+        end
+        if respawnp >= 100 then
+            Percent.Text = 99
             respawnp = tonumber(Percent.Text)
         end
         if percenthealth <= respawnp then
