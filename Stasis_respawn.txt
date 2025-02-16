@@ -72,15 +72,26 @@ RRbutton.MouseButton1Down:connect(function()
         Health = game.Players.LocalPlayer.Character.Humanoid.Health
         maxHealth = game.Players.LocalPlayer.Character.Humanoid.MaxHealth
         percenthealth = (Health / maxHealth) * 100
+        if Percent.Text == nil then
+            repeat
+                task.wait(0.1)
+            until Percent.Text ~= nil
+        end
         respawnp = tonumber(Percent.Text)
         if respawnp == nil then
-            Percent.Text = 70
-            respawnp = tonumber(Percent.Text)
+            repeat
+                respawnp = tonumber(Percent.Text)
+                task.wait(0.1)
+            until respawnp ~= nil
         end
+        respawnp = tonumber(Percent.Text)
         if respawnp >= 100 then
-            Percent.Text = 99
-            respawnp = tonumber(Percent.Text)
+            repeat
+                task.wait(0.1)
+                respawnp = tonumber(Percent.Text)
+            until respawnp < 100
         end
+        respawnp = tonumber(Percent.Text)
         if percenthealth <= respawnp then
             game:GetService("ReplicatedStorage").RemoteEvent:FireServer{"Respawn"}
             spawnlocation = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
