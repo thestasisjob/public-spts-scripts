@@ -148,7 +148,6 @@ Percent.Position = UDim2.new(0, 0, 0.324999988, 0)
 Percent.Size = UDim2.new(0, 20, 0, 20)
 Percent.Font = Enum.Font.SourceSans
 Percent.PlaceholderColor3 = Color3.fromRGB(0, 0, 0)
-Percent.PlaceholderText = "70"
 Percent.Text = "70"
 Percent.TextColor3 = Color3.fromRGB(0, 0, 0)
 Percent.TextSize = 20.000
