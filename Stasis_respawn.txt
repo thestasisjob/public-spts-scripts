@@ -101,28 +101,15 @@ RRbutton.MouseButton1Down:connect(function()
             game.Workspace:WaitForChild(PlayerName)
             game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
             game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
-            pcall(function()
-                if game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") and game.Players[PlayerName].Character.Humanoid.Health <= 1 then
-                    repeat
-                        task.wait(0)
-                    until game.Players.LocalPlayer.Character.Humanoid.Health >= 1
-                end
-            end)
-            local spawner = game.Workspace.Main:FindFirstChild("SpawnLocation")
-            if spawner then
-                spawner:Destroy()
-            end
             local startTime = tick()
-            while tick() - startTime < 0.750 do
+            while tick() - startTime < 0.7 do
                 task.wait(0.1)
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = spawnlocation
                 manageGuiAndLighting()
             end
-            if game.Workspace[PlayerName]:FindFirstChild("ForceField") then
-                repeat
-                    task.wait(0.1)
-                    manageGuiAndLighting()
-                until not game.Workspace[PlayerName]:FindFirstChild("ForceField")
+            while game.Workspace[PlayerName]:FindFirstChild("ForceField") do
+                task.wait(0.1)
+                manageGuiAndLighting()
             end
         end
     end
@@ -165,42 +152,33 @@ Close.TextSize = 20.000
 Close.MouseButton1Down:connect(function()
     _G.Respawning = false
     _G.f1Respawn = false
-    _G.f1Pressed = false
     respawnUI:Destroy()
 end)
 
 ----------------------------------------------f1 keybind respawn
 
-while _G.f1Respawn do
-    task.wait(0.1)
+if _G.f1Respawn then
     UserInputService.InputBegan:Connect(function(input, gameProcessed)
         if input.KeyCode == Enum.KeyCode.F1 then
-            if not f1Pressed then
-                _G.f1Pressed = true
-                game:GetService("ReplicatedStorage").RemoteEvent:FireServer{"Respawn"}
-                spawnlocation = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-                task.wait(1.25)
-                game.Workspace:WaitForChild(PlayerName)
-                game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
-                game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
-                local spawner = game.Workspace.Main:FindFirstChild("SpawnLocation")
-                if spawner then
-                    spawner:Destroy()
-                end
-                local startTime = tick()
-                while tick() - startTime < 0.750 do
-                    task.wait(0.1)
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = spawnlocation
-                    manageGuiAndLighting()
-                end
-                if game.Workspace[PlayerName]:FindFirstChild("ForceField") then
-                    repeat
-                        task.wait(0.1)
-                        manageGuiAndLighting()
-                    until not game.Workspace[PlayerName]:FindFirstChild("ForceField")
-                end
+            _G.f1Respawn = false
+            game:GetService("ReplicatedStorage").RemoteEvent:FireServer{"Respawn"}
+            spawnlocation = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            task.wait(1.25)
+            game.Workspace:WaitForChild(PlayerName)
+            game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+            game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
+            local startTime = tick()
+            while tick() - startTime < 0.7 do
+                task.wait(0.1)
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = spawnlocation
+                manageGuiAndLighting()
             end
-        end 
+            while game.Workspace[PlayerName]:FindFirstChild("ForceField") do
+                task.wait(0.1)
+                manageGuiAndLighting()
+            end
         end
+        _G.f1Respawn = true
+    end
     )
 end
