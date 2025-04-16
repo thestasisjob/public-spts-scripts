@@ -20,15 +20,20 @@ local function manageGuiAndLighting()
     if PlayerGui:FindFirstChild("IntroGui") and PlayerGui.IntroGui.Enabled then
         PlayerGui.IntroGui.Enabled = false
     end
-
     if game.Lighting:FindFirstChild("Blur") and game.Lighting.Blur.Enabled then
         game.Lighting.Blur.Enabled = false
     end
-
     if PlayerGui:FindFirstChild("ScreenGui") and not PlayerGui.ScreenGui.Enabled then
         PlayerGui.ScreenGui.Enabled = true
     end
 end
+
+task.spawn(function()
+    while true do
+        task.wait(0.1)
+        manageGuiAndLighting()
+    end
+end)
 
 local UserInputService = game:GetService("UserInputService")
 local PlayerName = game.Players.LocalPlayer.Name
@@ -102,14 +107,6 @@ RRbutton.MouseButton1Down:connect(function()
             game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
             game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(spawnlocation)
-            task.spawn(function()
-                pcall(function()
-                    while game.Workspace[PlayerName]:FindFirstChild("ForceField") do
-                        task.wait(0.1)
-                        manageGuiAndLighting()
-                    end
-                end)
-            end)
             local frames = 0
             local connection
             connection = RunService.RenderStepped:Connect(function()
@@ -181,14 +178,6 @@ if _G.f1Respawn then
             game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
             game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(spawnlocation)
-            task.spawn(function()
-                pcall(function()
-                    while game.Workspace[PlayerName]:FindFirstChild("ForceField") do
-                        task.wait(0.1)
-                        manageGuiAndLighting()
-                    end
-                end)
-            end)
             local frames = 0
             local connection
             connection = RunService.RenderStepped:Connect(function()
