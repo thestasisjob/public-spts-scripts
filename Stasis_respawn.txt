@@ -8,6 +8,7 @@ local RRbutton = Instance.new("TextButton")
 local Title = Instance.new("TextLabel")
 local Percent = Instance.new("TextBox")
 local Close = Instance.new("TextButton")
+local RunService = game:GetService("RunService")
 
 _G.Respawning = false
 _G.f1Respawn = true
@@ -36,7 +37,6 @@ local Health = game.Workspace[PlayerName].Humanoid.Health
 local percenthealth = (Health / maxHealth) * 100
 local spawnlocation = game.Players[PlayerName].Character.HumanoidRootPart.Position
 local respawnp = tonumber(Percent.Text)
-
 
 respawnUI.Name = "respawnUI"
 respawnUI.Parent = game.CoreGui.RespawnGui
@@ -67,7 +67,7 @@ RRbutton.MouseButton1Down:connect(function()
         game.Workspace:WaitForChild(PlayerName)
     end
     while _G.Respawning do 
-        task.wait(0)
+        task.wait()
         game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
         Health = game.Players.LocalPlayer.Character.Humanoid.Health
         maxHealth = game.Players.LocalPlayer.Character.Humanoid.MaxHealth
@@ -94,23 +94,34 @@ RRbutton.MouseButton1Down:connect(function()
         respawnp = tonumber(Percent.Text)
         if percenthealth <= respawnp then
             game:GetService("ReplicatedStorage").RemoteEvent:FireServer{"Respawn"}
-            spawnlocation = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            spawnlocation = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
             game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(0, 1000000, 0)
             game.Workspace.FallenPartsDestroyHeight = 0/0
             task.wait(1.25)
             game.Workspace:WaitForChild(PlayerName)
             game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
             game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
-            local startTime = tick()
-            while tick() - startTime < 0.7 do
-                task.wait(0.1)
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = spawnlocation
-                manageGuiAndLighting()
-            end
-            while game.Workspace[PlayerName]:FindFirstChild("ForceField") do
-                task.wait(0.1)
-                manageGuiAndLighting()
-            end
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(spawnlocation)
+            task.spawn(function()
+                while game.Workspace[PlayerName]:FindFirstChild("ForceField") do
+                    task.wait(0.1)
+                    manageGuiAndLighting()
+                end
+            end)
+            local frames = 0
+            local connection
+            connection = RunService.RenderStepped:Connect(function()
+                local currentPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+                if (currentPosition - spawnlocation).Magnitude < 5 then
+                    frames += 1
+                else
+                    frames = 0 
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(spawnlocation)
+                end
+                if frames >= 25 then
+                    connection:Disconnect()
+                end
+            end)
         end
     end
 end
@@ -162,21 +173,32 @@ if _G.f1Respawn then
         if input.KeyCode == Enum.KeyCode.F1 then
             _G.f1Respawn = false
             game:GetService("ReplicatedStorage").RemoteEvent:FireServer{"Respawn"}
-            spawnlocation = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            spawnlocation = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
             task.wait(1.25)
             game.Workspace:WaitForChild(PlayerName)
             game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
             game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
-            local startTime = tick()
-            while tick() - startTime < 0.7 do
-                task.wait(0.1)
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = spawnlocation
-                manageGuiAndLighting()
-            end
-            while game.Workspace[PlayerName]:FindFirstChild("ForceField") do
-                task.wait(0.1)
-                manageGuiAndLighting()
-            end
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(spawnlocation)
+            task.spawn(function()
+                while game.Workspace[PlayerName]:FindFirstChild("ForceField") do
+                    task.wait(0.1)
+                    manageGuiAndLighting()
+                end
+            end)
+            local frames = 0
+            local connection
+            connection = RunService.RenderStepped:Connect(function()
+                local currentPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+                if (currentPosition - spawnlocation).Magnitude < 5 then
+                    frames += 1
+                else
+                    frames = 0 
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(spawnlocation)
+                end
+                if frames >= 25 then
+                    connection:Disconnect()
+                end
+            end)
         end
         _G.f1Respawn = true
     end
