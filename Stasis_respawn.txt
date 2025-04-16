@@ -103,10 +103,12 @@ RRbutton.MouseButton1Down:connect(function()
             game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(spawnlocation)
             task.spawn(function()
-                while game.Workspace[PlayerName]:FindFirstChild("ForceField") do
-                    task.wait(0.1)
-                    manageGuiAndLighting()
-                end
+                pcall(function()
+                    while game.Workspace[PlayerName]:FindFirstChild("ForceField") do
+                        task.wait(0.1)
+                        manageGuiAndLighting()
+                    end
+                end)
             end)
             local frames = 0
             local connection
@@ -180,10 +182,12 @@ if _G.f1Respawn then
             game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(spawnlocation)
             task.spawn(function()
-                while game.Workspace[PlayerName]:FindFirstChild("ForceField") do
-                    task.wait(0.1)
-                    manageGuiAndLighting()
-                end
+                pcall(function()
+                    while game.Workspace[PlayerName]:FindFirstChild("ForceField") do
+                        task.wait(0.1)
+                        manageGuiAndLighting()
+                    end
+                end)
             end)
             local frames = 0
             local connection
