@@ -100,6 +100,7 @@ RRbutton.MouseButton1Down:connect(function()
         if percenthealth <= respawnp then
             game:GetService("ReplicatedStorage").RemoteEvent:FireServer{"Respawn"}
             spawnlocation = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+            game.Workspace.CurrentCamera.CameraType = "Fixed"
             game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(0, 1000000, 0)
             game.Workspace.FallenPartsDestroyHeight = 0/0
             task.wait(1.25)
@@ -111,7 +112,7 @@ RRbutton.MouseButton1Down:connect(function()
             local connection
             connection = RunService.RenderStepped:Connect(function()
                 local currentPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-                if (currentPosition - spawnlocation).Magnitude < 5 then
+                if (currentPosition - spawnlocation).Magnitude < 25 then
                     frames += 1
                 else
                     frames = 0 
@@ -173,6 +174,7 @@ if _G.f1Respawn then
             _G.f1Respawn = false
             game:GetService("ReplicatedStorage").RemoteEvent:FireServer{"Respawn"}
             spawnlocation = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+            game.Workspace.CurrentCamera.CameraType = "Fixed"
             task.wait(1.25)
             game.Workspace:WaitForChild(PlayerName)
             game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
@@ -182,7 +184,7 @@ if _G.f1Respawn then
             local connection
             connection = RunService.RenderStepped:Connect(function()
                 local currentPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-                if (currentPosition - spawnlocation).Magnitude < 5 then
+                if (currentPosition - spawnlocation).Magnitude < 25 then
                     frames += 1
                 else
                     frames = 0 
