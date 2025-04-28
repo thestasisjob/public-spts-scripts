@@ -9,6 +9,7 @@ local Title = Instance.new("TextLabel")
 local Percent = Instance.new("TextBox")
 local Close = Instance.new("TextButton")
 local RunService = game:GetService("RunService")
+local spawnlocation
 
 _G.Respawning = false
 _G.f1Respawn = true
@@ -98,12 +99,14 @@ RRbutton.MouseButton1Down:connect(function()
         end
         respawnp = tonumber(Percent.Text)
         if percenthealth <= respawnp then
-            game:GetService("ReplicatedStorage").RemoteEvent:FireServer{"Respawn"}
             spawnlocation = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+            task.spawn(function()
+                game:GetService("ReplicatedStorage").RemoteEvent:FireServer{"Respawn"}
+            end)
             game.Workspace.CurrentCamera.CameraType = "Fixed"
             game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(0, 1000000, 0)
             game.Workspace.FallenPartsDestroyHeight = 0/0
-            task.wait(1.25)
+            task.wait(1.4)
             game.Workspace:WaitForChild(PlayerName)
             game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
             game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
@@ -172,10 +175,12 @@ if _G.f1Respawn then
     UserInputService.InputBegan:Connect(function(input, gameProcessed)
         if input.KeyCode == Enum.KeyCode.F1 then
             _G.f1Respawn = false
-            game:GetService("ReplicatedStorage").RemoteEvent:FireServer{"Respawn"}
             spawnlocation = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+            task.spawn(function()
+                game:GetService("ReplicatedStorage").RemoteEvent:FireServer{"Respawn"}
+            end)
             game.Workspace.CurrentCamera.CameraType = "Fixed"
-            task.wait(1.25)
+            task.wait(1.4)
             game.Workspace:WaitForChild(PlayerName)
             game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
             game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
@@ -190,7 +195,7 @@ if _G.f1Respawn then
                     frames = 0 
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(spawnlocation)
                 end
-                if frames >= 25 then
+                if frames >= 35 then
                     connection:Disconnect()
                 end
             end)
