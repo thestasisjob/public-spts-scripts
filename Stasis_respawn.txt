@@ -10,6 +10,7 @@ local Percent = Instance.new("TextBox")
 local Close = Instance.new("TextButton")
 local RunService = game:GetService("RunService")
 local spawnlocation
+local PlayerName = game.Players.LocalPlayer.Name
 
 _G.Respawning = false
 _G.f1Respawn = true
@@ -27,6 +28,21 @@ local function manageGuiAndLighting()
     if PlayerGui:FindFirstChild("ScreenGui") and not PlayerGui.ScreenGui.Enabled then
         PlayerGui.ScreenGui.Enabled = true
     end
+end
+
+local function EnableGodmode()
+    local RemoteFunction = game.ReplicatedStorage.RemoteFunction
+    function RemoteFunction.OnClientInvoke(p29)
+        return false
+    end
+    game.ReplicatedStorage.RemoteEvent:FireServer({"QuestTalkStart"})
+    if not game.Workspace[PlayerName]:FindFirstChild("GodModeShield") then
+        repeat 
+            task.wait()
+        until game.Workspace[PlayerName]:FindFirstChild("GodModeShield")
+    end
+    local shield = game.Workspace[PlayerName]:FindFirstChild("GodModeShield")
+    shield.Name = "GodModeShield "
 end
 
 task.spawn(function()
@@ -78,7 +94,7 @@ RRbutton.MouseButton1Down:connect(function()
         Health = game.Players.LocalPlayer.Character.Humanoid.Health
         maxHealth = game.Players.LocalPlayer.Character.Humanoid.MaxHealth
         percenthealth = (Health / maxHealth) * 100
-        if Percent.Text == nil then
+        if Percent and Percent.Text == nil then
             repeat
                 task.wait(0.1)
             until Percent.Text ~= nil
@@ -102,10 +118,9 @@ RRbutton.MouseButton1Down:connect(function()
             spawnlocation = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
             task.spawn(function()
                 game:GetService("ReplicatedStorage").RemoteEvent:FireServer{"Respawn"}
+                EnableGodmode()
             end)
             game.Workspace.CurrentCamera.CameraType = "Fixed"
-            game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(0, 1000000, 0)
-            game.Workspace.FallenPartsDestroyHeight = 0/0
             task.wait(1.4)
             game.Workspace:WaitForChild(PlayerName)
             game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
@@ -178,6 +193,7 @@ if _G.f1Respawn then
             spawnlocation = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
             task.spawn(function()
                 game:GetService("ReplicatedStorage").RemoteEvent:FireServer{"Respawn"}
+                EnableGodmode()
             end)
             game.Workspace.CurrentCamera.CameraType = "Fixed"
             task.wait(1.4)
